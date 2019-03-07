@@ -1,0 +1,46 @@
+<?php get_header(); ?>
+<section class="content">
+	<div class="wrapper">
+    	<div class="main-content">
+  
+		<?php if(have_posts()) { ?> 
+           <?php if(is_home() && !is_paged() && !wp_is_mobile() && !$_GET['v_sortby']) { include('includes/just_watched.php'); } ?>   
+	<div class="panel">
+		<div class="p-title"><h2 style="background-color: #1AB3EE;">New Sex Games</h2></div> 
+		<a class="upper-title" href="<?php echo site_url(); ?>/?v_sortby=views&amp;v_orderby=desc">Most Viewed</a>
+	<div class="blog-list style-2">
+         <?php while (have_posts()) : the_post(); ?>
+         
+            <!--Video Block -->
+		<div class="video" id="video_<?php the_ID(); ?>">
+            <a href="<?php the_permalink() ?>" title="<?php the_title(); ?>" class="thumb">
+				<span><?php if(function_exists('the_views')) { the_views(); } ?><i><?php echo time_ago(); ?></i></span>
+                <i class="fa fa-play-circle-o"></i>
+                <?php if ( has_post_thumbnail() ) { echo the_post_thumbnail();}else{ ?>
+                    <img src="<?php echo get_post_meta($post->ID, get_option('wptuber_thumbs'), true); ?>" alt="<?php the_title(); ?>" />
+                <?php } ?>
+            	<h4><?php the_title(); ?></h4>
+			</a>
+		</div> 
+        <?php endwhile; ?>
+        <div class="cl"></div>
+        <!--Pagination-->              
+             <div class="pagination">
+                <?php if (function_exists("pagination")) {
+                    pagination($additional_loop->max_num_pages);
+                } ?>
+			</div>
+        <!--END Pagination-->         
+            
+        <?php } else { ?>
+            <h2>Sorry, no videos matched your criteria</h2>
+        <?php } ?>   
+	</div>
+	</div>
+
+	<?php if(is_home() && !is_paged() && !wp_is_mobile() && !$_GET['v_sortby']) { include('includes/today_most_viewed.php');} ?>   
+	<?php if(is_home() && !is_paged() && !wp_is_mobile() && get_option('wptuber_cat_index') == 'checked') { include('includes/latest_category.php');} ?>  
+		</div>
+	</div>
+</section>
+<?php get_footer(); ?>
